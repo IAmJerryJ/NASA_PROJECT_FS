@@ -43,6 +43,13 @@ describe("Launches API", () => {
       launchDate: "zoot",
     };
 
+    const launchDataWithInvalidDate2 = {
+      mission: "USS Enter",
+      rocket: "NCC 1701-D",
+      target: "Kepler-62 f",
+      launchDate: "test2022",
+    };    
+
     test("It should respond with 201 created", async () => {
       const response = await request(app)
         .post("/v1/launches")
@@ -79,5 +86,17 @@ describe("Launches API", () => {
         error: "Invalid launch date",
       });
     });
+    test("It should catch invalid dates2", async () => {
+      const response = await request(app)
+        .post("/v1/launches")
+        .send(launchDataWithInvalidDate2)
+        .expect("Content-Type", /json/)
+        .expect(400);
+
+      expect(response.body).toStrictEqual({
+        error: "Invalid launch date",
+      });
+    });
   });
+  
 });
